@@ -1,0 +1,324 @@
+.categories {
+  width: 100%;
+  padding: 110px 7%;
+
+  background: #080808;
+}
+
+
+/* ENCABEZADO */
+
+.categories-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 55px;
+}
+
+.categories-header p {
+  margin: 0 0 16px;
+
+  color: #d9ad4f;
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.categories-header h2 {
+  position: relative;
+
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.categories-header h2 span {
+  color: #d9ad4f;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* DECORACIÓN DORADA */
+
+.categories-header::after {
+  content: '◆';
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 240px;
+  height: 1px;
+
+  margin: 28px auto 0;
+
+  color: #d9ad4f;
+
+  font-size: 7px;
+  line-height: 1;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(217, 173, 79, 0.65) 35%,
+    rgba(217, 173, 79, 0.65) 65%,
+    transparent
+  );
+}
+
+
+/* GRID */
+
+.categories-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 18px;
+}
+
+
+/* TARJETAS */
+
+.category-card {
+  position: relative;
+
+  height: 520px;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: flex-end;
+
+  text-decoration: none;
+
+  background: #151515;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition:
+    transform 0.4s ease,
+    border-color 0.4s ease;
+}
+
+
+/* FOTOGRAFÍAS DE LAS COLECCIONES */
+
+.category-hombre {
+  background-image: url('/images/coleccion-hombre.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.category-mujer {
+  background-image: url('/images/coleccion-mujer.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.category-arabes {
+  background-image: url('/images/coleccion-arabe.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.category-combos {
+  background-image: url('/images/coleccion-combos.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+/* OSCURECER PARTE INFERIOR */
+
+.category-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.35) 55%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+
+  transition: opacity 0.4s ease;
+}
+
+
+/* ================================
+   CONTENIDO Y DEGRADADO DE TARJETAS
+================================ */
+
+.category-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+
+  padding: 30px;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.45) 45%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+
+  transition: background 0.4s ease;
+}
+
+/* CATEGORÍA */
+
+.category-overlay > span {
+  display: block;
+  margin-bottom: 12px;
+
+  color: #d9ad4f;
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+
+/* NOMBRE DE LA CATEGORÍA */
+
+.category-overlay h3 {
+  margin: 0 0 12px;
+
+  color: #ffffff;
+
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: -1px;
+}
+
+/* ENLACE PARA DESCUBRIR */
+
+.category-overlay p {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+
+/* EFECTO AL PASAR EL MOUSE */
+
+.category-card:hover {
+  transform: translateY(-8px);
+
+  border-color: rgba(217, 173, 79, 0.55);
+}
+
+.category-card:hover .category-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.96) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+}
+
+.category-card:hover .category-overlay h3 {
+  color: #d9ad4f;
+}
+
+
+/* TABLET */
+
+@media (max-width: 1000px) {
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-card {
+    height: 450px;
+  }
+}
+
+
+/* CELULAR */
+
+@media (max-width: 600px) {
+
+  .categories {
+    padding: 80px 20px;
+  }
+
+.categories-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 15px;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.categories-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.category-card {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+
+  .categories-header {
+    margin-bottom: 35px;
+  }
+
+  .categories-header h2 {
+    font-size: 40px;
+  }
+}
+
+
+/* INDICADORES DEL CARRUSEL */
+
+.category-indicators {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .category-indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  .category-indicators span {
+    width: 24px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.25);
+    transition:
+      width 0.3s ease,
+      background 0.3s ease;
+  }
+
+  .category-indicators span.active {
+    width: 40px;
+    background: #d9ad4f;
+  }
+}
