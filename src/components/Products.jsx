@@ -1,12 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getProducts } from '../data/products'
-import { useEffect } from 'react'
 import './Products.css'
 
 function Products() {
   const [activeProduct, setActiveProduct] = useState(0)
   const [products, setProducts] = useState(() => getProducts())
+
+  const featuredProducts = products.filter(
+    (product) => product.featured === true
+  )
 
   useEffect(() => {
     function updateProducts() {
@@ -24,9 +27,7 @@ function Products() {
 
   return (
     <section className="products">
-
       <div className="products-header">
-
         <div>
           <p>SELECCIÓN IMPERIUM</p>
 
@@ -39,72 +40,106 @@ function Products() {
           VER COLECCIÓN
           <span>→</span>
         </Link>
-
       </div>
 
       <div
         className="products-grid"
         onScroll={(event) => {
-          const cardWidth = event.currentTarget.clientWidth
-          const index = Math.round(
-            event.currentTarget.scrollLeft / cardWidth
-          )
+          const container = event.currentTarget
+          const card = container.querySelector('.product-card')
 
-          setActiveProduct(index)
+          if (card) {
+            const cardWidth = card.getBoundingClientRect().width
+            const gap = parseFloat(
+              getComputedStyle(container).columnGap
+            ) || 0
+
+            const index = Math.round(
+              container.scrollLeft / (cardWidth + gap)
+            )
+
+            setActiveProduct(index)
+          }
         }}
       >
-
-       {products
-  .filter((product) => product.featured === true)
-  .map((product) => (
+        {featuredProducts.map((product) => (
           <article className="product-card" key={product.id}>
-
             <div className="product-image">
-              <img
-                src={product.image}
-                alt={product.name}
-              />
+              <Link
+                to={`/producto/${product.id}`}
+                aria-label={`Ver detalles de ${product.name}`}
+                className="product-image-link"
+              >
+                <img
+                  src={product.image}
+                  alt={product.name}
+                />
+              </Link>
 
               <button
+                type="button"
                 className="product-favorite"
                 aria-label="Agregar a favoritos"
+                onClick={(event) => event.stopPropagation()}
               >
                 ♡
               </button>
             </div>
 
             <div className="product-info">
-
               <p className="product-category">
                 {product.category}
               </p>
 
-              <h3>{product.name}</h3>
+              <Link
+                to={`/producto/${product.id}`}
+                className="product-title-link"
+              >
+                <h3>{product.name}</h3>
+              </Link>
 
               <p className="product-price">
-                {product.price.toLocaleString('es-CO', {
+                {Number(product.price).toLocaleString('es-CO', {
                   style: 'currency',
                   currency: 'COP',
                   maximumFractionDigits: 0,
                 })}
               </p>
 
+              <Link
+                to={`/producto/${product.id}`}
+                className="product-detail-link"
+              >
+                VER PERFUME →
+              </Link>
             </div>
-
           </article>
         ))}
-
       </div>
 
       <div className="product-indicators">
-        {[0, 1, 2, 3].map((index) => (
-          <span
-            key={index}
+        {featuredProducts.map((product, index) => (
+          <button
+            type="button"
+            key={product.id}
+            aria-label={`Ver destacado ${index + 1}`}
             className={activeProduct === index ? 'active' : ''}
-          ></span>
+            onClick={() => {
+              const container = document.querySelector('.products-grid')
+              const card = container?.querySelectorAll('.product-card')[index]
+
+              if (container && card) {
+                container.scrollTo({
+                  left: card.offsetLeft - container.offsetLeft,
+                  behavior: 'smooth',
+                })
+
+                setActiveProduct(index)
+              }
+            }}
+          />
         ))}
       </div>
-
     </section>
   )
 }

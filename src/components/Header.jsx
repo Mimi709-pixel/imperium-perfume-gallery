@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getProducts } from '../data/products'
+import { useCarrito } from '../context/CarritoContext'
 import './Header.css'
 
 function Header() {
@@ -9,38 +10,46 @@ function Header() {
   const [searchTerm, setSearchTerm] = useState('')
   const [products, setProducts] = useState(() => getProducts())
 
-const navigate = useNavigate()
+  const { items } = useCarrito()
+  const navigate = useNavigate()
 
-useEffect(() => {
-  function updateProducts() {
-    setProducts(getProducts())
-  }
+  const cantidadCarrito = items.reduce(
+    (total, item) => total + Number(item.cantidad || 0),
+    0
+  )
 
-  window.addEventListener('imperium-products-updated', updateProducts)
-  window.addEventListener('storage', updateProducts)
+  useEffect(() => {
+    function updateProducts() {
+      setProducts(getProducts())
+    }
 
-  return () => {
-    window.removeEventListener('imperium-products-updated', updateProducts)
-    window.removeEventListener('storage', updateProducts)
-  }
-}, [])
+    window.addEventListener('imperium-products-updated', updateProducts)
+    window.addEventListener('storage', updateProducts)
 
-const term = searchTerm.trim().toLowerCase()
+    return () => {
+      window.removeEventListener('imperium-products-updated', updateProducts)
+      window.removeEventListener('storage', updateProducts)
+    }
+  }, [])
 
-const searchResults = term
-  ? products.filter((product) =>
-      (product.name || '').toLowerCase().includes(term) ||
-      (product.category || '').toLowerCase().includes(term)
-    ).slice(0, 8)
-  : []
+  const term = searchTerm.trim().toLowerCase()
+
+  const searchResults = term
+    ? products
+        .filter((product) =>
+          (product.name || '').toLowerCase().includes(term) ||
+          (product.category || '').toLowerCase().includes(term) ||
+          (Array.isArray(product.categories) &&
+            product.categories.some((category) =>
+              (category || '').toLowerCase().includes(term)
+            ))
+        )
+        .slice(0, 8)
+    : []
 
   return (
     <header className="header">
-
-
-      {/* BARRA DE NAVEGACIÓN */}
       <div className="navigation-bar">
-
         <nav className="nav">
           <Link to="/">Inicio</Link>
           <Link to="/hombre">Hombre</Link>
@@ -50,10 +59,11 @@ const searchResults = term
         </nav>
 
         <div className="header-actions">
-
           <button
+            type="button"
             className="search-button"
             aria-label="Buscar productos"
+            aria-expanded={searchOpen}
             onClick={() => setSearchOpen(!searchOpen)}
           >
             <span>⌕</span>
@@ -62,52 +72,39 @@ const searchResults = term
           <Link
             to="/carrito"
             className="cart-button"
-            aria-label="Carrito de compras"
+            aria-label={`Carrito de compras: ${cantidadCarrito} unidades`}
           >
             <span>🛒</span>
-            <span className="cart-count">0</span>
+            <span className="cart-count">{cantidadCarrito}</span>
           </Link>
 
           <button
+            type="button"
             className="menu-button"
             aria-label="Abrir menú"
+            aria-expanded={menuOpen}
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <span></span>
             <span></span>
             <span></span>
           </button>
-
         </div>
-
       </div>
 
-      {/* MENÚ MÓVIL */}
       {menuOpen && (
         <div className="mobile-menu">
-          <Link to="/" onClick={() => setMenuOpen(false)}>
-            Inicio
-          </Link>
-          <Link to="/hombre" onClick={() => setMenuOpen(false)}>
-            Hombre
-          </Link>
-          <Link to="/mujer" onClick={() => setMenuOpen(false)}>
-            Mujer
-          </Link>
-          <Link to="/arabes" onClick={() => setMenuOpen(false)}>
-            Árabes
-          </Link>
-          <Link to="/combos" onClick={() => setMenuOpen(false)}>
-            Combos
-          </Link>
+          <Link to="/" onClick={() => setMenuOpen(false)}>Inicio</Link>
+          <Link to="/hombre" onClick={() => setMenuOpen(false)}>Hombre</Link>
+          <Link to="/mujer" onClick={() => setMenuOpen(false)}>Mujer</Link>
+          <Link to="/arabes" onClick={() => setMenuOpen(false)}>Árabes</Link>
+          <Link to="/combos" onClick={() => setMenuOpen(false)}>Combos</Link>
         </div>
       )}
 
-      {/* BUSCADOR */}
       {searchOpen && (
         <div className="search-panel">
           <div className="search-panel-content">
-
             <input
               type="text"
               placeholder="Buscar perfumes..."
@@ -115,16 +112,19 @@ const searchResults = term
               autoFocus
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
-/>
+            />
 
             <button
+              type="button"
               className="search-close"
-              onClick={() => setSearchOpen(false)}
+              onClick={() => {
+                setSearchOpen(false)
+                setSearchTerm('')
+              }}
               aria-label="Cerrar búsqueda"
             >
               ×
             </button>
-
           </div>
 
           {term && (
@@ -136,15 +136,7 @@ const searchResults = term
                     className="search-result"
                     key={product.id}
                     onClick={() => {
-                      const paths = {
-                        Hombre: '/hombre',
-                        Mujer: '/mujer',
-                        'Árabes': '/arabes',
-                        Combos: '/combos',
-                        Originales: '/',
-                      }
-
-                      navigate(paths[product.category] || '/')
+                      navigate(`/producto/${product.id}`)
                       setSearchOpen(false)
                       setSearchTerm('')
                     }}
@@ -153,7 +145,13 @@ const searchResults = term
 
                     <span className="search-result-info">
                       <strong>{product.name}</strong>
-                      <small>{product.category}</small>
+
+                      <small>
+                        {Array.isArray(product.categories)
+                          ? product.categories.filter(Boolean).join(' · ')
+                          : product.category}
+                      </small>
+
                       <span>
                         {Number(product.price || 0).toLocaleString('es-CO', {
                           style: 'currency',
@@ -173,7 +171,6 @@ const searchResults = term
           )}
         </div>
       )}
-
     </header>
   )
 }

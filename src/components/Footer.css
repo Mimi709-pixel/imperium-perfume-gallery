@@ -1,0 +1,174 @@
+.footer-imperium {
+  background-color: #070707;
+  color: #d1cdb8;
+  border-top: 1px solid #222222;
+  padding: 40px 20px 20px 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* CARDS DE BENEFICIOS */
+.footer-beneficios {
+  max-width: 1100px;
+  margin: 0 auto 35px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .footer-beneficios {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.footer-beneficio-card {
+  background: #0f0f0f;
+  border: 1px solid #1f1f1f;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.footer-icono {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.footer-beneficio-card h3 {
+  color: #e5c77e;
+  font-size: 1.05rem;
+  margin: 0 0 6px 0;
+}
+
+.footer-beneficio-card p {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.footer-linea-divisoria {
+  max-width: 1100px;
+  height: 1px;
+  background: #1f1f1f;
+  margin: 0 auto 35px auto;
+}
+
+/* SECCIONES Y CONTENIDO */
+.footer-contenido {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1.2fr 1fr;
+  gap: 40px;
+}
+
+@media (max-width: 850px) {
+  .footer-contenido {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+.footer-marca h2 {
+  color: #ffffff;
+  letter-spacing: 3px;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.footer-subtitulo {
+  color: #e5c77e;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin: 0 0 12px 0;
+}
+
+.footer-descripcion {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #888888;
+}
+
+.footer-seccion h4 {
+  color: #ffffff;
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+}
+
+.footer-seccion p {
+  font-size: 0.88rem;
+  margin: 0 0 8px 0;
+  color: #a0a0a0;
+}
+
+.footer-seccion strong {
+  color: #e5c77e;
+}
+
+/* NEWSLETTER */
+.footer-newsletter {
+  display: flex;
+  margin-top: 15px;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 320px;
+}
+
+.footer-newsletter input {
+  background: #121212;
+  border: none;
+  color: #ffffff;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.footer-newsletter button {
+  background: linear-gradient(135deg, #c6a45c, #e5c77e);
+  color: #000;
+  border: none;
+  padding: 0 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.footer-exito {
+  display: block;
+  font-size: 0.8rem;
+  color: #e5c77e;
+  margin-top: 6px;
+}
+
+/* REDES SOCIALES */
+.footer-redes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-red-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #a0a0a0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.footer-red-link:hover {
+  color: #e5c77e;
+}
+
+.footer-copyright {
+  max-width: 1100px;
+  margin: 30px auto 0 auto;
+  border-top: 1px solid #1a1a1a;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #666666;
+}

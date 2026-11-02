@@ -28,12 +28,6 @@ function Hero() {
         </Link>
       </div>
 
-      <div className="hero-indicators">
-        <span className="active"></span>
-        <span></span>
-        <span></span>
-      </div>
-
     </section>
   )
 }

@@ -1,0 +1,384 @@
+/* =========================================
+   IMPERIUM PERFUME GALLERY
+   DETALLE DEL PRODUCTO
+========================================= */
+
+.producto-detalle {
+  min-height: 80vh;
+  box-sizing: border-box;
+  padding: 48px 7%;
+  background: #0b0b0b;
+  color: #f5f0e6;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* NAVEGACIÓN SUPERIOR (DOBLE VOLVER) */
+.producto-navegacion-superior {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.producto-volver,
+.producto-volver-categoria {
+  display: inline-block;
+  color: #d4af65;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.producto-volver:hover,
+.producto-volver-categoria:hover {
+  color: #f5d995;
+}
+
+.producto-separador-nav {
+  color: #444444;
+}
+
+.producto-detalle-contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.producto-detalle-imagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  min-height: 420px;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #141414;
+  border: 1px solid rgba(212, 175, 101, 0.25);
+  border-radius: 12px;
+}
+
+.producto-detalle-imagen img {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  max-height: 540px;
+  object-fit: contain;
+}
+
+.producto-detalle-info {
+  min-width: 0;
+  width: 100%;
+}
+
+.producto-detalle-categoria {
+  color: #d4af65;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.producto-detalle-info h1 {
+  margin: 18px 0;
+  color: #f5f0e6;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.producto-detalle-info p {
+  line-height: 1.8;
+}
+
+.producto-detalle-precio {
+  margin: 24px 0;
+  color: #d4af65;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* =========================================
+   DESCRIPCIÓN
+========================================= */
+
+.producto-descripcion {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 26px 0;
+  padding: 24px;
+  background: #101010;
+  border: 1px solid rgba(212, 175, 101, 0.25);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.98rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.producto-descripcion-contenido,
+.producto-descripcion-formateada,
+.producto-descripcion-formateada p,
+.producto-descripcion-formateada span,
+.producto-descripcion-formateada li,
+.producto-descripcion-formateada a,
+.producto-descripcion-linea {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  color: #ffffff !important; /* Fuerza las letras a color blanco legible */
+  line-height: 1.9;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: normal;
+  white-space: normal;
+}
+
+.producto-descripcion-formateada img {
+  max-width: 100%;
+  height: auto;
+}
+
+.producto-descripcion-formateada table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Mantener el fondo oscuro del recuadro */
+.producto-descripcion {
+  background-color: #101010;
+}
+
+/* Texto con formato */
+.producto-descripcion-formateada p {
+  margin: 0 0 16px;
+}
+
+.producto-descripcion-formateada h1,
+.producto-descripcion-formateada h2,
+.producto-descripcion-formateada h3,
+.producto-descripcion-formateada h4 {
+  max-width: 100%;
+  margin: 22px 0 12px;
+  color: #e5c77e !important;
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+/* RESALTAR NEGRITAS Y TITULARES INTERNOS EN DORADO */
+.producto-descripcion-formateada strong,
+.producto-descripcion-formateada b,
+.producto-descripcion-linea strong {
+  color: #e5c77e !important;
+  font-weight: 700;
+}
+
+.producto-descripcion-formateada ul,
+.producto-descripcion-formateada ol {
+  margin: 10px 0 20px;
+  padding-left: 25px;
+}
+
+.producto-descripcion-formateada li {
+  margin-bottom: 7px;
+  padding-left: 3px;
+  color: #ffffff !important;
+}
+
+.producto-descripcion-formateada a {
+  color: #e5c77e !important;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.producto-descripcion-formateada a:hover {
+  color: #f0d99d !important;
+  text-decoration: underline;
+}
+
+.producto-descripcion-formateada em {
+  font-style: italic;
+}
+
+.producto-descripcion-formateada u {
+  text-decoration: underline;
+}
+
+.producto-descripcion-linea {
+  margin: 0 0 16px;
+}
+
+/* =========================================
+   LEER MÁS / LEER MENOS
+========================================= */
+
+.producto-descripcion-contenido.contraida {
+  position: relative;
+  max-height: 240px;
+  overflow: hidden;
+}
+
+.producto-descripcion-contenido.contraida::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 16, 16, 0),
+    #101010
+  );
+  pointer-events: none;
+}
+
+.producto-descripcion-contenido.expandida {
+  max-height: none;
+  overflow: visible;
+}
+
+.producto-leer-mas {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 0;
+  background: transparent;
+  border: none;
+  color: #e5c77e;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.producto-leer-mas:hover {
+  color: #f0d99d;
+}
+
+.producto-leer-mas:focus-visible {
+  outline: 2px solid #e5c77e;
+  outline-offset: 4px;
+}
+
+/* =========================================
+   BOTONES
+========================================= */
+
+.producto-agregar,
+.producto-ir-carrito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 360px;
+  min-height: 50px;
+  box-sizing: border-box;
+  margin: 20px 0 12px;
+  padding: 14px 24px;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.producto-agregar {
+  background: linear-gradient(135deg, #e5c77e, #b58a3b);
+  color: #111;
+  border: 1px solid #e5c77e;
+}
+
+.producto-agregar:hover {
+  background: #f0d99d;
+  transform: translateY(-1px);
+}
+
+.producto-ir-carrito {
+  margin-top: 10px;
+  background: transparent;
+  color: #e5c77e;
+  border: 1px solid #d4af65;
+}
+
+.producto-ir-carrito:hover {
+  background: #d4af65;
+  color: #111;
+  transform: translateY(-1px);
+}
+
+.producto-agregar:focus-visible,
+.producto-ir-carrito:focus-visible {
+  outline: 2px solid #f5f0e6;
+  outline-offset: 4px;
+}
+
+/* =========================================
+   TABLET Y CELULAR
+========================================= */
+
+@media (max-width: 768px) {
+  .producto-detalle {
+    padding: 28px 5%;
+  }
+
+  .producto-navegacion-superior {
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .producto-detalle-contenido {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .producto-detalle-imagen {
+    min-height: 280px;
+    padding: 20px;
+  }
+
+  .producto-detalle-imagen img {
+    max-height: 360px;
+  }
+
+  .producto-detalle-info h1 {
+    font-size: 2rem;
+  }
+
+  .producto-detalle-precio {
+    font-size: 1.5rem;
+  }
+
+  .producto-descripcion {
+    padding: 18px;
+    font-size: 0.94rem;
+  }
+
+  .producto-agregar,
+  .producto-ir-carrito {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .producto-detalle {
+    padding: 24px 16px;
+  }
+
+  .producto-descripcion {
+    padding: 15px;
+  }
+}

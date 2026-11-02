@@ -252,25 +252,28 @@
 }
 
 @media (max-width: 600px) {
-  .product-indicators {
-    display: flex;
+  .products-indicators {
+    display: flex !important;
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 22px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 100%;
   }
 
-  .product-indicators span {
+  .products-indicators span {
+    display: block !important;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.25);
+    transition: all 0.3s ease;
+  }
+
+  .products-indicators span.active {
     width: 24px;
-    height: 2px;
-    background: rgba(17, 17, 17, 0.2);
-    transition:
-      width 0.3s ease,
-      background 0.3s ease;
-  }
-
-  .product-indicators span.active {
-    width: 40px;
-    background: #9b7835;
+    border-radius: 4px;
+    background-color: #e5ba73; /* Dorado Imperium */
   }
 }

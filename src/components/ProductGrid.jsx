@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { getProducts } from '../data/products'
 import './ProductGrid.css'
 
@@ -19,14 +20,20 @@ function ProductGrid({ category }) {
     }
   }, [])
 
-  const categoryProducts = products.filter(
-    (product) => product.category === category
-  )
+  const categoryProducts = products.filter((product) => {
+    const productCategories = Array.isArray(product.categories)
+      ? product.categories
+      : [product.category]
+
+    return productCategories.includes(category) && product.available
+  })
 
   return (
     <main className="catalog-page">
       <p className="catalog-eyebrow">IMPERIUM PERFUME GALLERY</p>
+
       <h1>Perfumes para {category}</h1>
+
       <p className="catalog-description">
         Descubre nuestra colección y encuentra tu esencia.
       </p>
@@ -39,27 +46,40 @@ function ProductGrid({ category }) {
         <div className="catalog-grid">
           {categoryProducts.map((product) => (
             <article className="catalog-card" key={product.id}>
-              <div className="catalog-image">
-                <img src={product.image} alt={product.name} />
-              </div>
+              <Link
+                to={`/producto/${product.id}`}
+                className="catalog-product-link"
+                aria-label={`Ver detalles de ${product.name}`}
+              >
+                <div className="catalog-image">
+                  <img src={product.image} alt={product.name} />
+                </div>
 
-              <div className="catalog-info">
-                <p>{product.category}</p>
-                <h2>{product.name}</h2>
-                <p className="catalog-price">
-                  {product.price.toLocaleString('es-CO', {
-                    style: 'currency',
-                    currency: 'COP',
-                    maximumFractionDigits: 0,
-                  })}
-                </p>
+                <div className="catalog-info">
+                  <p>
+                    {(Array.isArray(product.categories)
+                      ? product.categories
+                      : [product.category]
+                    ).join(' · ')}
+                  </p>
 
-                {product.available && product.stock > 0 ? (
-                  <span>Disponible</span>
-                ) : (
-                  <span>Consulta disponibilidad</span>
-                )}
-              </div>
+                  <h2>{product.name}</h2>
+
+                  <p className="catalog-price">
+                    {Number(product.price).toLocaleString('es-CO', {
+                      style: 'currency',
+                      currency: 'COP',
+                      maximumFractionDigits: 0,
+                    })}
+                  </p>
+
+                  {product.stock > 0 ? (
+                    <span>Disponible</span>
+                  ) : (
+                    <span>Consulta disponibilidad</span>
+                  )}
+                </div>
+              </Link>
             </article>
           ))}
         </div>

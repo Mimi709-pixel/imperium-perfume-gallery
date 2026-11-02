@@ -1,7 +1,11 @@
-/* ===== PANEL IMPERIUM ===== */
+/* =========================================
+   IMPERIUM PERFUME GALLERY
+   PANEL DE ADMINISTRACIÓN
+========================================= */
 
 .admin-page {
   min-height: 100vh;
+  box-sizing: border-box;
   padding: 48px clamp(18px, 5vw, 72px) 70px;
   background:
     radial-gradient(ellipse at top right, #30230e 0%, transparent 35%),
@@ -44,7 +48,13 @@
   line-height: 1.6;
 }
 
+/* =========================================
+   SECCIONES
+========================================= */
+
 .admin-section {
+  min-width: 0;
+  box-sizing: border-box;
   margin-bottom: 36px;
   padding: 30px;
   border: 1px solid #30291c;
@@ -62,12 +72,15 @@
   font-weight: 500;
 }
 
-/* ===== FORMULARIO ===== */
+/* =========================================
+   FORMULARIOS
+========================================= */
 
 .admin-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 22px;
+  min-width: 0;
 }
 
 .admin-form > label {
@@ -80,7 +93,8 @@
 }
 
 .admin-form input:not([type='checkbox']),
-.admin-form select {
+.admin-form select,
+.admin-section > input:not([type='search']) {
   box-sizing: border-box;
   width: 100%;
   min-height: 46px;
@@ -95,17 +109,34 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.admin-form input::placeholder {
+.admin-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 1px solid #49402e;
+  border-radius: 9px;
+  outline: none;
+  background: #191919;
+  color: #f7f2e8;
+  font: inherit;
+  resize: vertical;
+}
+
+.admin-form input::placeholder,
+.admin-form textarea::placeholder {
   color: #777166;
 }
 
 .admin-form input:focus,
-.admin-form select:focus {
+.admin-form select:focus,
+.admin-form textarea:focus {
   border-color: #d4af61;
   box-shadow: 0 0 0 3px #d4af611c;
 }
 
 .admin-form .admin-checkbox {
+  display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
@@ -117,13 +148,25 @@
   width: 17px;
   height: 17px;
   accent-color: #c9a354;
+  cursor: pointer;
 }
+
+/* =========================================
+   BOTONES
+========================================= */
 
 .admin-form-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   grid-column: 1 / -1;
+}
+
+.admin-page .admin-section button {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s, background 0.2s;
 }
 
 .admin-form button,
@@ -136,8 +179,6 @@
   color: #17120a;
   font-size: 13px;
   font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s, filter 0.2s;
 }
 
 .admin-form button:hover,
@@ -146,10 +187,38 @@
   transform: translateY(-1px);
 }
 
+/* Botones secundarios */
 .admin-form button[type='button'] {
   border-color: #514a3c;
   background: #22211e;
   color: #e8dfce;
+}
+
+/* Botones principales de guardar */
+.admin-page .admin-section button[type='submit'] {
+  min-height: 44px;
+  padding: 12px 22px;
+  border: 1px solid #c6a45c;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #dfc17a, #b38a3f);
+  color: #17120a;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Botones de agregar */
+.admin-page .admin-section .admin-form > button[type='button'],
+.admin-page .admin-section .admin-form button[type='button'] {
+  border: 1px solid #c6a45c;
+  background: linear-gradient(135deg, #dfc17a, #b38a3f);
+  color: #17120a;
+}
+
+/* Botones de quitar */
+.admin-product-actions button:last-child {
+  border-color: #554039;
+  background: #29201d;
+  color: #e5b7a7;
 }
 
 .admin-section > p[role='status'] {
@@ -158,12 +227,15 @@
   font-size: 14px;
 }
 
-/* ===== LISTA DE PRODUCTOS ===== */
+/* =========================================
+   LISTA DE PRODUCTOS Y TARJETAS
+========================================= */
 
 .admin-product-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  min-width: 0;
 }
 
 .admin-product-item {
@@ -171,6 +243,8 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 22px;
   border: 1px solid #393022;
   border-radius: 13px;
@@ -206,17 +280,370 @@
 }
 
 .admin-product-actions button {
-  padding: 9px 13px;
   min-height: 36px;
+  padding: 9px 13px;
 }
 
-.admin-product-actions button:last-child {
-  border-color: #554039;
-  background: #29201d;
-  color: #e5b7a7;
+/* =========================================
+   BUSCADOR
+========================================= */
+
+.admin-section input[type='search'] {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  margin: 18px 0 24px;
+  padding: 14px 18px;
+  background: #151515;
+  color: #f5f0e6;
+  border: 1px solid #4b3a19;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* ===== TABLET Y CELULAR ===== */
+.admin-section input[type='search']::placeholder {
+  color: #a39b8c;
+}
+
+.admin-section input[type='search']:focus {
+  border-color: #c6a45c;
+  box-shadow: 0 0 0 3px rgb(198 164 92 / 14%);
+}
+
+/* =========================================
+   EDITOR DE DESCRIPCIONES QUILL
+========================================= */
+
+.admin-description-field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.admin-description-field > label {
+  display: block;
+  margin-bottom: 10px;
+  color: #e8e0d0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-description-field .ql-toolbar.ql-snow,
+.admin-description-field .ql-container.ql-snow {
+  box-sizing: border-box;
+  border-color: rgba(212, 175, 101, 0.4);
+}
+
+.admin-description-field .ql-toolbar.ql-snow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 8px;
+  background: #191816;
+  border-radius: 8px 8px 0 0;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-formats {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 2px;
+  margin: 0 7px 0 0;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-stroke {
+  stroke: #e5c77e;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-fill {
+  fill: #e5c77e;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-picker {
+  color: #f5f0e6;
+  font-size: 12px;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-picker-label {
+  border-color: transparent;
+}
+
+.admin-description-field .ql-toolbar.ql-snow button {
+  width: 26px;
+  height: 26px;
+  padding: 3px;
+  border-radius: 4px;
+}
+
+.admin-description-field .ql-toolbar.ql-snow button:hover,
+.admin-description-field .ql-toolbar.ql-snow button:focus {
+  background: #342a18;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-picker-options {
+  z-index: 10;
+  padding: 5px;
+  background: #191816;
+  border: 1px solid #4b3a19;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px #0009;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-picker-item {
+  color: #f5f0e6;
+}
+
+.admin-description-field .ql-toolbar.ql-snow .ql-picker-item:hover {
+  color: #e5c77e;
+}
+
+.admin-description-field .ql-container.ql-snow {
+  min-height: 180px;
+  background: #151515;
+  border-radius: 0 0 8px 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.admin-description-field .ql-editor {
+  min-height: 180px;
+  padding: 16px;
+  color: #ffffff !important;
+  background: transparent;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.admin-description-field .ql-editor *,
+.admin-description-field .ql-editor p,
+.admin-description-field .ql-editor span,
+.admin-description-field .ql-editor li {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.admin-description-field .ql-editor strong,
+.admin-description-field .ql-editor b,
+.admin-description-field .ql-editor strong *,
+.admin-description-field .ql-editor b * {
+  color: #e5c77e !important;
+  font-weight: bold;
+}
+
+.admin-description-field .ql-editor.ql-blank::before {
+  color: #a39b8c !important;
+  font-style: normal;
+}
+
+.admin-description-field .ql-editor a {
+  color: #e5c77e !important;
+}
+
+/* =========================================
+   VISTA PREVIA DE DESCRIPCIÓN EN ADMIN
+   No modifica el diseño de la tienda
+========================================= */
+
+.admin-description-preview {
+  margin-top: 12px;
+  padding: 14px 16px;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+  color: #f5f0e6;
+  background: #151515;
+  border: 1px solid #30291c;
+  border-radius: 8px;
+}
+
+.admin-description-preview p,
+.admin-description-preview li {
+  color: #f5f0e6;
+  line-height: 1.7;
+}
+
+.admin-description-preview strong,
+.admin-description-preview b,
+.admin-description-preview h1,
+.admin-description-preview h2,
+.admin-description-preview h3 {
+  color: #e5c77e;
+}
+
+.admin-description-preview h1,
+.admin-description-preview h2,
+.admin-description-preview h3 {
+  margin: 12px 0 8px;
+}
+
+.admin-description-preview ul,
+.admin-description-preview ol {
+  padding-left: 24px;
+}
+
+.admin-description-preview a {
+  color: #e5c77e;
+}
+
+/* =========================================
+   CATEGORÍAS MÚLTIPLES
+========================================= */
+
+.admin-categories-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid #4b3a19;
+  border-radius: 10px;
+  background: #151515;
+}
+
+.admin-categories-field legend {
+  padding: 0 8px;
+  color: #c6a45c;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-categories-field .admin-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #f5f0e6;
+}
+
+.admin-categories-field input[type='checkbox'] {
+  accent-color: #c6a45c;
+  cursor: pointer;
+}
+
+/* =========================================
+   TARJETAS DE SECTORES
+========================================= */
+
+.admin-sector-title {
+  display: block;
+  margin-bottom: 12px;
+  color: #e5c77e;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.admin-sector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.admin-sector-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  background: #1a1a1a;
+}
+
+.admin-sector-name {
+  display: block;
+  color: #f5f0e6;
+  font-size: 0.95rem;
+}
+
+.admin-sector-price {
+  color: #e5c77e;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.admin-sector-remove {
+  padding: 6px 12px;
+  border: 1px solid #ba2d2d;
+  border-radius: 4px;
+  background: rgba(186, 45, 45, 0.2);
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-sector-remove:hover {
+  background: #ba2d2d;
+  color: #ffffff;
+}
+
+.admin-sector-inputs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-input-dark {
+  padding: 10px 14px !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 6px !important;
+  background: #141414 !important;
+  color: #f5f0e6 !important;
+  font-size: 0.9rem !important;
+}
+
+.admin-input-dark:focus {
+  border-color: #e5c77e !important;
+  outline: none;
+}
+
+.admin-btn-secondary {
+  padding: 10px 18px;
+  border: 1px solid #e5c77e;
+  border-radius: 6px;
+  background: #222222;
+  color: #e5c77e;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-btn-secondary:hover {
+  background: #e5c77e;
+  color: #111111;
+}
+
+.admin-btn-gold {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #c6a45c, #e5c77e);
+  color: #111111;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.admin-btn-gold:hover {
+  opacity: 0.9;
+}
+
+.admin-status-message {
+  margin-top: 12px;
+  color: #e5c77e;
+  font-weight: 600;
+}
+
+/* =========================================
+   TABLET
+========================================= */
 
 @media (max-width: 760px) {
   .admin-page {
@@ -245,6 +672,45 @@
   .admin-product-actions {
     width: 100%;
   }
+
+  .admin-section input[type='search'] {
+    max-width: 100%;
+    padding: 13px 15px;
+  }
+}
+
+/* =========================================
+   CELULARES
+========================================= */
+
+@media (max-width: 600px) {
+  .admin-description-field .ql-toolbar.ql-snow {
+    gap: 4px;
+    padding: 7px;
+  }
+
+  .admin-description-field .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 4px;
+  }
+
+  .admin-description-field .ql-toolbar.ql-snow button {
+    width: 24px;
+    height: 24px;
+  }
+
+  .admin-description-field .ql-toolbar.ql-snow .ql-picker {
+    font-size: 11px;
+  }
+
+  .admin-page .admin-section .admin-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-page .admin-section input,
+  .admin-page .admin-section select,
+  .admin-page .admin-section textarea {
+    min-width: 0;
+  }
 }
 
 @media (max-width: 420px) {
@@ -254,5 +720,9 @@
 
   .admin-form-actions button {
     width: 100%;
+  }
+
+  .admin-page .admin-section button {
+    max-width: 100%;
   }
 }
