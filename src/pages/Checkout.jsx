@@ -144,7 +144,7 @@ function Checkout() {
     setMostrarModalPago(true)
   }
 
-  // LÓGICA DE MERCADO PAGO DIRECTA (SIN REDIRECCIONAR A WHATSAPP)
+  // LÓGICA DE MERCADO PAGO
   async function procesarPagoMercadoPago() {
     setMostrarModalPago(false)
     setMostrarProcesandoMercadoPago(true)
@@ -203,12 +203,12 @@ function Checkout() {
     }
   }
 
-  // ENVÍO DE PEDIDO A WHATSAPP
+  // ENVÍO DE PEDIDO A WHATSAPP (CORREGIDO)
   function enviarPedidoWhatsApp() {
     const numeroWA = '573053638769'
 
     const listaProductos = items.map(
-      (item) => `• *${item.name}* (x${item.cantidad}) - ${formatoPrecio(item.price * item.cantidad)}`
+      (item) => `• *${item.name} (x${item.cantidad})* - ${formatoPrecio(Number(item.price) * Number(item.cantidad))}`
     ).join('\n')
 
     const mensaje = `✨ *NUEVO PEDIDO - IMPERIUM PERFUME GALLERY* ✨\n\n` +

@@ -1,32 +1,64 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getProducts } from '../data/products'
 import './ProductGrid.css'
 
 function ProductGrid({ category }) {
-  const [products, setProducts] = useState(() => getProducts())
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let isMounted = true
+
+    async function loadData() {
+      try {
+        const data = await getProducts()
+        if (isMounted && Array.isArray(data)) {
+          setProducts(data)
+        }
+      } catch (error) {
+        console.error('Error al cargar productos en la categoría:', error)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+
+    loadData()
+
     function updateProducts() {
-      setProducts(getProducts())
+      loadData()
     }
 
     window.addEventListener('imperium-products-updated', updateProducts)
     window.addEventListener('storage', updateProducts)
 
     return () => {
+      isMounted = false
       window.removeEventListener('imperium-products-updated', updateProducts)
       window.removeEventListener('storage', updateProducts)
     }
-  }, [])
+  }, [category])
 
-  const categoryProducts = products.filter((product) => {
-    const productCategories = Array.isArray(product.categories)
-      ? product.categories
-      : [product.category]
+  const categoryProducts = Array.isArray(products)
+    ? products.filter((product) => {
+        const productCategories = Array.isArray(product.categories)
+          ? product.categories
+          : [product.category]
 
-    return productCategories.includes(category) && product.available
-  })
+        // Comprobación flexible asegurando coincidencia de categoría
+        return productCategories.some(
+          (cat) => cat && cat.toLowerCase() === category.toLowerCase()
+        )
+      })
+    : []
+
+  if (loading) {
+    return (
+      <main className="catalog-page" style={{ textAlign: 'center', padding: '80px', color: '#fff' }}>
+        <p>Cargando colección Imperium...</p>
+      </main>
+    )
+  }
 
   return (
     <main className="catalog-page">

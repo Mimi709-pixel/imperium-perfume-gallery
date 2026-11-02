@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import ReactQuill from 'react-quill-new'
 import DOMPurify from 'dompurify'
@@ -33,11 +33,9 @@ const EDITOR_FORMATS = [
   'strike',
   'color',
   'list',
-  'bullet',
   'align',
   'link',
 ]
-
 function getProductCategories(product) {
   const categories = Array.isArray(product.categories)
     ? product.categories
@@ -65,8 +63,9 @@ function Admin() {
     navigate('/admin/login')
   }
 
-  const [products, setProducts] = useState(() => getProducts())
-  const [config, setConfig] = useState(() => getStoreConfig())
+  const [products, setProducts] = useState([])
+  const [config, setConfig] = useState(getStoreConfig())
+  const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState(null)
   const [message, setMessage] = useState('')
   const [configMessage, setConfigMessage] = useState('')
@@ -90,6 +89,22 @@ function Admin() {
   }
 
   const [form, setForm] = useState({ ...emptyForm })
+
+  useEffect(() => {
+    async function loadAdminData() {
+      try {
+        const data = await getProducts()
+        if (Array.isArray(data)) {
+          setProducts(data)
+        }
+      } catch (error) {
+        console.error('Error cargando productos en Admin:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadAdminData()
+  }, [])
 
   function handleChange(event) {
     const { name, value, type, checked } = event.target
@@ -135,7 +150,7 @@ function Admin() {
     if (!Number.isFinite(priceNum) || priceNum < 0) return
 
     const zonasActualizadas = [
-      ...config.zones,
+      ...(config.zones || []),
       { name: nuevaZona.name.trim(), price: priceNum },
     ]
 
@@ -146,7 +161,7 @@ function Admin() {
   }
 
   function eliminarZona(index) {
-    const zonasActualizadas = config.zones.filter((_, i) => i !== index)
+    const zonasActualizadas = (config.zones || []).filter((_, i) => i !== index)
     const nuevaConfig = { ...config, zones: zonasActualizadas }
     setConfig(nuevaConfig)
     saveStoreConfig(nuevaConfig)
@@ -198,20 +213,20 @@ function Admin() {
     }
   }
 
-  function updateProducts(updatedProducts, successMessage) {
-  try {
-    saveProducts(updatedProducts)
-    setProducts(updatedProducts)
-    setMessage(successMessage)
-    return true
-  } catch (error) {
-    console.error('Error al guardar los productos:', error)
-    setMessage('No se pudieron guardar los cambios.')
-    return false
+  async function updateProducts(updatedProducts, successMessage) {
+    try {
+      await saveProducts(updatedProducts)
+      setProducts(updatedProducts)
+      setMessage(successMessage)
+      return true
+    } catch (error) {
+      console.error('Error al guardar los productos:', error)
+      setMessage('No se pudieron guardar los cambios.')
+      return false
+    }
   }
-}
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
     const price = Number(form.price)
     const originalPrice = form.originalPrice ? Number(form.originalPrice) : 0
@@ -244,8 +259,8 @@ function Admin() {
       promoBadge: form.promoBadge.trim(),
       image: form.image.trim(),
       stock,
-      available: form.available,
-      featured: form.featured,
+      available: Boolean(form.available),
+      featured: Boolean(form.featured),
     }
 
     let updatedProducts
@@ -257,15 +272,16 @@ function Admin() {
       )
       successMessage = 'Producto actualizado.'
     } else {
+      const maxId = products.length > 0 ? Math.max(0, ...products.map((p) => Number(p.id) || 0)) : 0
       const newProduct = {
-        id: Math.max(0, ...products.map((product) => product.id)) + 1,
+        id: String(maxId + 1),
         ...productData,
       }
       updatedProducts = [...products, newProduct]
       successMessage = 'Producto agregado.'
     }
 
-    if (updateProducts(updatedProducts, successMessage)) {
+    if (await updateProducts(updatedProducts, successMessage)) {
       setForm({ ...emptyForm })
       setEditingId(null)
     }
@@ -297,17 +313,27 @@ function Admin() {
     setMessage('')
   }
 
-  function handleDelete(id) {
+  async function handleDelete(id) {
     if (!window.confirm('¿Quieres eliminar este producto?')) return
     const updatedProducts = products.filter((p) => p.id !== id)
-    if (updateProducts(updatedProducts, 'Producto eliminado.')) {
+    if (await updateProducts(updatedProducts, 'Producto eliminado.')) {
       if (editingId === id) handleCancel()
     }
   }
 
-  const filteredProducts = products.filter((p) =>
-    (p.name ?? '').toLowerCase().includes(searchTerm.trim().toLowerCase())
-  )
+  const filteredProducts = Array.isArray(products)
+    ? products.filter((p) =>
+        (p.name ?? '').toLowerCase().includes(searchTerm.trim().toLowerCase())
+      )
+    : []
+
+  if (loading) {
+    return (
+      <main className="admin-page" style={{ textAlign: 'center', padding: '80px', color: '#fff' }}>
+        <p>Cargando panel de administración...</p>
+      </main>
+    )
+  }
 
   return (
     <main className="admin-page">
@@ -389,7 +415,7 @@ function Admin() {
             </label>
 
             <div className="admin-product-list" style={{ marginTop: '12px', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
-              {config.zones.map((zona, index) => (
+              {(config.zones || []).map((zona, index) => (
                 <div key={index} className="admin-product-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <strong>{zona.name}</strong>

@@ -1,9 +1,10 @@
-const STORAGE_KEY = 'imperium-products'
+import { supabase } from '../services/supabase'
+
 const CONFIG_KEY = 'imperium-store-config'
 
 const initialProducts = [
   {
-    id: 1,
+    id: '1',
     name: 'Invictus Victory',
     category: 'Hombre',
     categories: ['Hombre'],
@@ -16,7 +17,7 @@ const initialProducts = [
     promoBadge: '',
   },
   {
-    id: 2,
+    id: '2',
     name: 'Moschino Toy 2',
     category: 'Mujer',
     categories: ['Mujer'],
@@ -29,7 +30,7 @@ const initialProducts = [
     promoBadge: '',
   },
   {
-    id: 3,
+    id: '3',
     name: 'Royal Bleu',
     category: 'Árabes',
     categories: ['Árabes'],
@@ -42,7 +43,7 @@ const initialProducts = [
     promoBadge: 'MÁS VENDIDO',
   },
   {
-    id: 4,
+    id: '4',
     name: 'Club the nuit/Le Beau',
     category: 'Combos',
     categories: ['Combos'],
@@ -67,7 +68,6 @@ const defaultConfig = {
     { name: 'Suba / Usaquén', price: 20000 },
     { name: 'Otras zonas de Bogotá', price: 18000 },
   ],
-  // MÓDULOS DE NIVEL EMPRESARIAL
   announcementBar: {
     enabled: true,
     text: '✨ ENVÍOS GRATIS A BOGOTÁ POR COMPRAS SUPERIORES A $200.000 COP ✨',
@@ -82,24 +82,51 @@ const defaultConfig = {
   ],
 }
 
-export function getProducts() {
-  const saved = localStorage.getItem(STORAGE_KEY)
-  if (!saved) return initialProducts
+// Inicializamos con los productos locales para que nunca esté vacío al arrancar
+let cachedProducts = [...initialProducts]
 
+// Función síncrona/asíncrona unificada para obtener productos sin romper componentes
+export async function getProducts() {
   try {
-    const parsed = JSON.parse(saved)
-    return Array.isArray(parsed) ? parsed : initialProducts
+    const { data, error } = await supabase.from('products').select('*')
+    if (error) throw error
+    if (data && data.length > 0) {
+      cachedProducts = data.map(p => ({
+        ...p,
+        id: String(p.id),
+        originalPrice: p.original_price || p.originalPrice || 0,
+        promoBadge: p.promo_badge || p.promoBadge || '',
+        categories: p.categories || [p.category]
+      }))
+      return cachedProducts
+    }
   } catch (error) {
-    return initialProducts
+    console.error('Error al sincronizar con Supabase:', error)
   }
+  return cachedProducts
 }
 
-export function saveProducts(products) {
+export async function saveProducts(productsList) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(products))
-    window.dispatchEvent(new Event('imperium-products-updated'))
-    return true
+    if (Array.isArray(productsList)) {
+      cachedProducts = productsList
+      for (const prod of productsList) {
+        await supabase.from('products').upsert({
+          id: String(prod.id),
+          name: prod.name,
+          category: prod.category,
+          price: prod.price,
+          stock: prod.stock,
+          image: prod.image,
+          description: prod.description || ''
+        })
+      }
+      window.dispatchEvent(new Event('imperium-products-updated'))
+      return true
+    }
+    return false
   } catch (error) {
+    console.error('Error al guardar en Supabase:', error)
     return false
   }
 }
@@ -130,5 +157,3 @@ export function saveStoreConfig(config) {
     return false
   }
 }
-
-export const products = getProducts()

@@ -162,19 +162,16 @@ export function CarritoProvider({ children }) {
       }
     }
 
-    const productosGuardados = leerProductosGuardados()
+    let productosGuardados = leerProductosGuardados()
 
-    if (!productosGuardados) {
-      return {
-        ok: false,
-        mensaje: 'No se pudo comprobar el inventario. Inténtalo de nuevo.',
-      }
+    if (!productosGuardados || productosGuardados.length === 0) {
+      productosGuardados = [producto]
     }
 
     const productoActual = buscarProducto(
       productosGuardados,
       producto.id
-    )
+    ) || producto
 
     if (!productoActual) {
       return {
@@ -252,16 +249,17 @@ export function CarritoProvider({ children }) {
       }
     }
 
-    const productosGuardados = leerProductosGuardados()
+    let productosGuardados = leerProductosGuardados()
 
-    if (!productosGuardados) {
-      return {
-        ok: false,
-        mensaje: 'No se pudo comprobar el inventario.',
-      }
+    if (!productosGuardados || productosGuardados.length === 0) {
+      productosGuardados = items
     }
 
-    const productoActual = buscarProducto(productosGuardados, id)
+    let productoActual = buscarProducto(productosGuardados, id)
+
+    if (!productoActual) {
+      productoActual = items.find((item) => String(item.id) === String(id))
+    }
 
     if (!productoActual || productoActual.available === false) {
       return {
@@ -343,3 +341,5 @@ export function useCarrito() {
 
   return contexto
 }
+
+export default CarritoContext

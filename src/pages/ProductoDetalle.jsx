@@ -12,25 +12,52 @@ function pareceHTML(texto) {
 function ProductoDetalle() {
   const { id } = useParams()
   const { agregarProducto } = useCarrito()
-  const [products, setProducts] = useState(() => getProducts())
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const [mensaje, setMensaje] = useState('')
   const [descripcionExpandida, setDescripcionExpandida] = useState(false)
 
   useEffect(() => {
+    let isMounted = true
+
+    async function loadData() {
+      try {
+        const data = await getProducts()
+        if (isMounted && Array.isArray(data)) {
+          setProducts(data)
+        }
+      } catch (error) {
+        console.error('Error al cargar productos:', error)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+
+    loadData()
+
     function updateProducts() {
-      setProducts(getProducts())
+      loadData()
     }
 
     window.addEventListener('imperium-products-updated', updateProducts)
     window.addEventListener('storage', updateProducts)
 
     return () => {
+      isMounted = false
       window.removeEventListener('imperium-products-updated', updateProducts)
       window.removeEventListener('storage', updateProducts)
     }
   }, [])
 
-  const product = products.find((item) => String(item.id) === id)
+  if (loading) {
+    return (
+      <main className="producto-detalle" style={{ textAlign: 'center', padding: '100px', color: '#fff' }}>
+        <p>Cargando detalle del perfume...</p>
+      </main>
+    )
+  }
+
+  const product = products.find((item) => String(item.id) === String(id))
 
   if (!product) {
     return (
@@ -47,7 +74,6 @@ function ProductoDetalle() {
     ? product.categories
     : [product.category]
 
-  // Detectar la categoría del producto para armar la ruta de retorno específica (ej: /mujer, /hombre)
   const categoriaPrincipal = categories.filter(Boolean)[0] || 'Hombre'
   const rutaCategoria = `/${categoriaPrincipal.toLowerCase()}`
 
@@ -75,9 +101,11 @@ function ProductoDetalle() {
 
   const descripcionLarga = descripcion.length > 280
 
+  // Verificación flexible de disponibilidad basada principalmente en el stock
+  const esDisponible = product.available !== false && Number(product.stock) > 0
+
   return (
     <main className="producto-detalle">
-      {/* Navegación superior: Volver a tienda + Volver a la sección del perfume */}
       <div className="producto-navegacion-superior">
         <Link to="/" className="producto-volver">
           ← Volver a la tienda
@@ -167,22 +195,18 @@ function ProductoDetalle() {
             )}
           </div>
 
-          {product.available ? (
-            Number(product.stock) > 0 ? (
-              <>
-                <p>Disponibles: {product.stock}</p>
+          {esDisponible ? (
+            <>
+              <p>Disponibles: {product.stock}</p>
 
-                <button
-                  type="button"
-                  className="producto-agregar"
-                  onClick={handleAgregar}
-                >
-                  Agregar al carrito
-                </button>
-              </>
-            ) : (
-              <p>Consulta disponibilidad antes de comprar.</p>
-            )
+              <button
+                type="button"
+                className="producto-agregar"
+                onClick={handleAgregar}
+              >
+                Agregar al carrito
+              </button>
+            </>
           ) : (
             <p>Producto no disponible actualmente.</p>
           )}

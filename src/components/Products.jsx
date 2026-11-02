@@ -5,25 +5,55 @@ import './Products.css'
 
 function Products() {
   const [activeProduct, setActiveProduct] = useState(0)
-  const [products, setProducts] = useState(() => getProducts())
-
-  const featuredProducts = products.filter(
-    (product) => product.featured === true
-  )
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let isMounted = true
+
+    async function loadData() {
+      try {
+        const data = await getProducts()
+        if (isMounted && Array.isArray(data)) {
+          setProducts(data)
+        }
+      } catch (error) {
+        console.error('Error cargando productos destacados:', error)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+
+    loadData()
+
     function updateProducts() {
-      setProducts(getProducts())
+      loadData()
     }
 
     window.addEventListener('imperium-products-updated', updateProducts)
     window.addEventListener('storage', updateProducts)
 
     return () => {
+      isMounted = false
       window.removeEventListener('imperium-products-updated', updateProducts)
       window.removeEventListener('storage', updateProducts)
     }
   }, [])
+
+  // Si hay productos con featured true los muestra, sino toma los primeros para asegurar que la sección no quede vacía
+  const featuredProducts = Array.isArray(products) && products.length > 0
+    ? products.filter((product) => product.featured === true)
+    : []
+
+  const displayProducts = featuredProducts.length > 0 ? featuredProducts : products.slice(0, 4)
+
+  if (loading) {
+    return (
+      <section className="products" style={{ textAlign: 'center', padding: '40px', color: '#fff' }}>
+        <p>Cargando destacados...</p>
+      </section>
+    )
+  }
 
   return (
     <section className="products">
@@ -62,7 +92,7 @@ function Products() {
           }
         }}
       >
-        {featuredProducts.map((product) => (
+        {displayProducts.map((product) => (
           <article className="product-card" key={product.id}>
             <div className="product-image">
               <Link
@@ -118,7 +148,7 @@ function Products() {
       </div>
 
       <div className="product-indicators">
-        {featuredProducts.map((product, index) => (
+        {displayProducts.map((product, index) => (
           <button
             type="button"
             key={product.id}
